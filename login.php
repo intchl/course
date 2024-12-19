@@ -58,7 +58,7 @@
                 <!-- Register -->
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="mb-2">Selamat datang di Admin! 👋</h4>
+                        <h4 class="mb-2">Halo! 👋</h4>
                         <p class="mb-4">Mohon login terlebih dahulu</p>
 
                         <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
