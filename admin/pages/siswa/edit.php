@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+  header("Location: ../../../login.php");
+  exit;
+}
+
+require '../../../functions.php';
+
+if (isset($_GET['id'])) {
+  $id_student = $_GET['id'];
+  $query = mysqli_query($conn, "SELECT * FROM student WHERE id = '$id_student'");
+
+  if ($query && mysqli_num_rows($query) > 0) {
+    $data = mysqli_fetch_array($query);
+  } else {
+    echo '<script>alert("Data tidak ditemukan!");window.location.href = "index.php";</script>';
+    exit;
+  }
+} else {
+  echo '<script>alert("ID tidak ditemukan di URL!");window.location.href = "index.php";</script>';
+  exit;
+}
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -264,7 +289,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -290,14 +315,14 @@
                     <h5 class="mb-0">Edit Data Siswa</h5>
                   </div>
                   <div class="card-body">
-                    <form>
+                    <form method="POST">
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-fullname">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="basic-default-fullname" placeholder="Masukkan nama lengkap" />
+                        <input type="text" name="name" value="<?= $data['name'] ?>" class="form-control" id="basic-default-fullname" placeholder="Masukkan nama lengkap" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-address">Alamat</label>
-                        <input type="text" class="form-control" id="basic-default-address" placeholder="Alamat lengkap" />
+                        <input type="text" name="address" value="<?= $data['address'] ?>" class="form-control" id="basic-default-address" placeholder="Alamat lengkap" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-phone">No HP</label>
@@ -305,9 +330,11 @@
                           type="text"
                           id="basic-default-phone"
                           class="form-control phone-mask"
-                          placeholder="Masukkan No.HP" />
+                          placeholder="Masukkan No.HP"
+                          name="phone"
+                          value="<?= $data['phone'] ?>" />
                       </div>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="submit" class="btn btn-primary" name="edit">Simpan</button>
                       <a href="index.php">
                         <btn class="btn btn-secondary">Batal</btn>
                       </a>
@@ -385,3 +412,30 @@
 </body>
 
 </html>
+
+<?php
+//catching data from form
+if (isset($_POST['edit'])) {
+  $name = $_POST['name'];
+  $address = $_POST['address'];
+  $phone = $_POST['phone'];
+
+
+  $query = mysqli_query($conn, "UPDATE student set name = '$name', 
+                                                                address = '$address',
+                                                                  phone = '$phone' 
+                                                                 WHERE id = '$id_student'");
+
+
+
+  if ($query) {
+    if ($query) {
+      echo '<script>alert("Data berhasil di Update!");window.location.href = "index.php";</script>';
+    } else {
+      echo '<script>alert("Data gagal di Update!");window.location.href = "index.php";</script>';
+    }
+  }
+}
+
+
+?>

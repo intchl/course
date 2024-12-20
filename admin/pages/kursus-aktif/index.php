@@ -1,3 +1,24 @@
+<?php session_start();
+
+if (!isset($_SESSION["login"])) {
+  header("Location: ../../../login.php");
+  exit;
+}
+
+require '../../../functions.php';
+
+$data = tampil("SELECT 
+            reg_course.id_reg,
+            users.username , 
+            course.course_name, 
+            reg_course.date_course
+          FROM 
+            reg_course
+          INNER JOIN 
+            users ON reg_course.users_id = users.id
+          INNER JOIN 
+            course ON reg_course.kursus_id = course.id");
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -264,7 +285,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -293,31 +314,44 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>No</th>
                       <th>Nama Siswa</th>
                       <th>Kursus</th>
                       <th>Tanggal Pendaftaran</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
-                  <tbody class="table-border-bottom-0">
-                    <tr>
-                      <td>Fajar Unyu</td>
-                      <td>Belajar HTML bersama Intan Unyu</td>
-                      <td>Jumat, 20 Agustus 2024</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
+                  <?php $i = 1; ?>
+                  <?php foreach ($data as $data2): ?>
+                      <tbody class="table-border-bottom-0">
+                    
+                        <tr>
+                          <td><?= $i; ?></td>
+                          <td><?= $data2["username"]; ?></td>
+                          <td><?= $data2["course_name"]; ?></td>
+                          <td><?= $data2["date_course"]; ?></td>
+                          <td>
+                            <div class="dropdown">
+                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                              
+                              <form action="" method="POST" onsubmit="return confirm('Apakah anda yakin ingin menghapus data ini?')">
+                                  <input type="hidden" name="id_reg" value="<?= $data2['id_reg']; ?>">
+                                  <button type="submit" name="hapus" class="dropdown-item">
+                                      <i class="bx bx-trash me-1"></i> Delete
+                                  </button>
+                              </form>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                            </div>
+                          </td>
+                        </tr>
 
-                    <!-- Additional rows go here -->
+                        <!-- Additional rows go here -->
+                      </tbody>
+                      <?php $i++; ?>
+                  <?php endforeach; ?>
                   </tbody>
                 </table>
               </div>
@@ -397,3 +431,16 @@
 </body>
 
 </html>
+<?php
+if (isset($_POST['hapus'])) {
+  $id_reg = $_POST['id_reg'];
+
+  $query = mysqli_query($conn, "DELETE FROM reg_course WHERE id_reg ='$id_reg'");
+  if ($query) {
+    if ($query) {
+      echo '<script>alert("Data berhasil dihapus!");window.location.href = "index.php";</script>';
+    } else {
+      echo '<script>alert("Data gagal dihapus!");window.location.href = "index.php";</script>';
+    }
+  }
+}

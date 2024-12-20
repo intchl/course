@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+  header("Location: ../../../login.php");
+  exit;
+}
+
+require '../../../functions.php';
+
+if (isset($_GET['id'])) {
+  $id_course = $_GET['id'];
+  $query = mysqli_query($conn, "SELECT * FROM course WHERE id = '$id_course'");
+
+  if ($query && mysqli_num_rows($query) > 0) {
+    $data = mysqli_fetch_array($query);
+  } else {
+    echo '<script>alert("Data tidak ditemukan!");window.location.href = "index.php";</script>';
+    exit;
+  }
+} else {
+  echo '<script>alert("ID tidak ditemukan di URL!");window.location.href = "index.php";</script>';
+  exit;
+}
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -264,7 +289,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -290,17 +315,19 @@
                     <h5 class="mb-0">Edit Data Kursus</h5>
                   </div>
                   <div class="card-body">
-                    <form>
+                    <form method="POST">
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-name">Judul Kursus</label>
-                        <input type="text" class="form-control" id="basic-default-name" placeholder="Masukkan Judul Kursus" />
+                        <input type="text" name="course_name" value="<?= $data['course_name'] ?>" class="form-control" id="basic-default-name" placeholder="Masukkan Judul Kursus" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-address">Deskripsi</label>
                         <textarea
                           id="basic-default-message"
                           class="form-control"
-                          placeholder="Masukkan deskripsi"></textarea>
+                          placeholder="Masukkan deskripsi"
+                          name="description" 
+                          ><?= $data['description'] ?></textarea>
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-phone">Jadwal Kursus</label>
@@ -308,9 +335,11 @@
                           type="text"
                           id="basic-default-phone"
                           class="form-control phone-mask"
-                          placeholder="Masukkan Jadwal" />
+                          placeholder="Masukkan Jadwal" 
+                          name="schedule" 
+                          value="<?= $data['schedule'] ?>"/>
                       </div>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="submit" class="btn btn-primary" name="edit">Simpan</button>
                       <a href="index.php">
                         <btn class="btn btn-secondary">Batal</btn>
                       </a>
@@ -388,3 +417,29 @@
 </body>
 
 </html>
+<?php
+//catching data from form
+if (isset($_POST['edit'])) {
+  $course_name = $_POST['course_name'];
+  $description = $_POST['description'];
+  $schedule = $_POST['schedule'];
+
+
+  $query = mysqli_query($conn, "UPDATE course set course_name = '$course_name', 
+                                                                description = '$description',
+                                                                  schedule = '$schedule' 
+                                                                 WHERE id = '$id_course'");
+
+
+
+  if ($query) {
+    if ($query) {
+      echo '<script>alert("Data berhasil di Update!");window.location.href = "index.php";</script>';
+    } else {
+      echo '<script>alert("Data gagal di Update!");window.location.href = "index.php";</script>';
+    }
+  }
+}
+
+
+?>

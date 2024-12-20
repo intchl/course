@@ -1,3 +1,14 @@
+<?php session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../../../login.php");
+    exit;
+}
+
+require '../../../functions.php';
+
+$data = tampil("SELECT * FROM course");
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -264,7 +275,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -293,95 +304,46 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>No</th>
                       <th>Nama Kursus</th>
                       <th>Deskripsi</th>
                       <th>Jadwal</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
+                  <?php $i = 1; ?>
+                  <?php foreach ($data as $data2) : ?>
                   <tbody class="table-border-bottom-0">
+                    
                     <tr>
-                      <td>Belajar HTML Bersama Intan Unyu</td>
-                      <td>Mari belajar bersama intan unyu agar kamu lebih paham HTML. Dimulai dari dasar sampai jadi expert loh. tunggu apa lagi ayo join! </td>
-                      <td>Jumat, 20 Agustus 2024</td>
+                      <td><?= $i; ?></td>
+                      <td><?= $data2["course_name"]; ?></td>
+                      <td><?= $data2["description"]; ?></td>
+                      <td><?= $data2["schedule"]; ?></td>
                       <td>
                         <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Belajar HTML Bersama Intan Unyu</td>
-                      <td>Mari belajar bersama intan unyu agar kamu lebih paham HTML. Dimulai dari dasar sampai jadi expert loh. tunggu apa lagi ayo join! </td>
-                      <td>Jumat, 20 Agustus 2024</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Belajar HTML Bersama Intan Unyu</td>
-                      <td>Mari belajar bersama intan unyu agar kamu lebih paham HTML. Dimulai dari dasar sampai jadi expert loh. tunggu apa lagi ayo join! </td>
-                      <td>Jumat, 20 Agustus 2024</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Belajar HTML Bersama Intan Unyu</td>
-                      <td>Mari belajar bersama intan unyu agar kamu lebih paham HTML. Dimulai dari dasar sampai jadi expert loh. tunggu apa lagi ayo join! </td>
-                      <td>Jumat, 20 Agustus 2024</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Belajar HTML Bersama Intan Unyu</td>
-                      <td>Mari belajar bersama intan unyu agar kamu lebih paham HTML. Dimulai dari dasar sampai jadi expert loh. tunggu apa lagi ayo join! </td>
-                      <td>Jumat, 20 Agustus 2024</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
+                          <a class="dropdown-item" href="edit.php?id=<?= $data2['id']; ?>">
+                              <i class="bx bx-edit-alt me-1"></i> Edit
+                          </a>
+                          <form action="" method="POST" onsubmit="return confirm('Apakah anda yakin ingin menghapus data ini?')">
+                              <input type="hidden" name="id_student" value="<?= $data2['id']; ?>">
+                              <button type="submit" name="hapus" class="dropdown-item">
+                                  <i class="bx bx-trash me-1"></i> Delete
+                              </button>
+                          </form>
+                      </div>
                         </div>
                       </td>
                     </tr>
 
                     <!-- Additional rows go here -->
+                  </tbody>
+                  <?php $i++; ?>
+                  <?php endforeach; ?>
                   </tbody>
                 </table>
               </div>
@@ -461,3 +423,16 @@
 </body>
 
 </html>
+<?php
+if(isset($_POST['hapus'])){
+    $id_student = $_POST['id_student'];
+
+    $query = mysqli_query($conn, "DELETE FROM course WHERE id ='$id_student'");
+    if($query){
+        if ($query) {
+            echo '<script>alert("Data berhasil dihapus!");window.location.href = "index.php";</script>';
+        } else {
+            echo '<script>alert("Data gagal dihapus!");window.location.href = "index.php";</script>';
+        }
+    }
+}

@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../../../login.php");
+    exit;
+}
+
+require '../../../functions.php';
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -293,24 +303,26 @@
                     <form>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-name">Judul Kursus</label>
-                        <input type="text" class="form-control" id="basic-default-name" placeholder="Masukkan Judul Kursus" />
+                        <input type="text" name="course_name" class="form-control" id="basic-default-name" placeholder="Masukkan Judul Kursus" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-address">Deskripsi</label>
                         <textarea
                           id="basic-default-message"
                           class="form-control"
-                          placeholder="Masukkan deskripsi"></textarea>
+                          placeholder="Masukkan deskripsi"
+                          name="description"></textarea>
                       </div>
                       <div class="mb-3">
-                        <label class="form-label" for="basic-default-phone">Jadwal Kursus</label>
+                        <label class="form-label" for="basic-default-schedule">Jadwal Kursus</label>
                         <input
                           type="text"
-                          id="basic-default-phone"
-                          class="form-control phone-mask"
+                          id="basic-default-name"
+                          class="form-control"
+                          name="schedule"
                           placeholder="Masukkan Jadwal" />
                       </div>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
                       <a href="index.php">
                         <btn class="btn btn-secondary">Batal</btn>
                       </a>
@@ -388,3 +400,26 @@
 </body>
 
 </html>
+<?php
+//catching data from form
+if (isset($_GET['simpan'])) {
+    $course_name = $_GET['course_name'];
+    $description = $_GET['description'];
+    $schedule = $_GET['schedule'];
+
+
+    $query = mysqli_query($conn, "INSERT INTO course (course_name, description, schedule) VALUES ('$course_name', '$description', '$schedule')");
+    if ($query) {
+        echo '<script>alert("Data berhasil disimpan!");window.location.href = "index.php";</script>';
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+    if($query){
+        if ($query) {
+            echo '<script>alert("Data berhasil disimpan!");window.location.href = "index.php";</script>';
+        } else {
+            echo '<script>alert("Data gagal disimpan!");window.location.href = "index.php";</script>';
+        }
+    }
+}
+?>

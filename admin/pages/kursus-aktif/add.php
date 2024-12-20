@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../../../login.php");
+    exit;
+}
+
+require '../../../functions.php';
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -293,30 +303,33 @@
                     <form>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-name">Nama Siswa</label>
-                        <select class="form-control" id="basic-default-name">
+                        <select class="form-control" id="basic-default-name" name="users_id">
                           <option value="" disabled selected>Pilih Nama Siswa</option>
-                          <option value="siswa1">Suri Prikitiw</option>
-                          <option value="siswa2">Fajar Unyu</option>
+                          <?php 
+                              $users = mysqli_query($conn, "SELECT * FROM users WHERE role = 'student'");
+                              while($mk = mysqli_fetch_array($users)){
+                          ?>
+                              <option value="<?= $mk['id'] ?>"><?= $mk['username'] ?></option>
+                          <?php
+                              }
+                          ?>
                         </select>
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-address">Kursus</label>
-                        <select class="form-control" id="basic-default-name">
+                        <select class="form-control" id="basic-default-name" name="kursus_id">
                           <option value="" disabled selected>Pilih Kursus</option>
-                          <option value="siswa1">Belajar HTML bersama Intan Unyu</option>
-                          <option value="siswa2">Belajar CSS bersama Intan Unyu</option>
+                          <?php 
+                              $course = mysqli_query($conn, "SELECT * FROM course");
+                              while($mk = mysqli_fetch_array($course)){
+                          ?>
+                              <option value="<?= $mk['id'] ?>"><?= $mk['course_name'] ?></option>
+                          <?php
+                              }
+                          ?>
                         </select>
                       </div>
-                      <div class="mb-3">
-                        <label class="form-label" for="basic-default-phone">Tanggal Pendaftaran</label>
-                        <input
-                          type="date"
-                          id="basic-default-phone"
-                          class="form-control"
-                          placeholder="Pilih Tanggal" />
-                      </div>
-
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
                       <a href="index.php">
                         <btn class="btn btn-secondary">Batal</btn>
                       </a>
@@ -394,3 +407,32 @@
 </body>
 
 </html>
+<?php
+//catching data from form
+// Debug data GET
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+  echo "<pre>";
+  print_r($_GET); // Tampilkan data GET
+  echo "</pre>";
+}
+
+// Menggunakan GET untuk menyimpan data
+if (isset($_GET['simpan'])) {
+  echo "Data diterima melalui GET.<br>";
+  $users_id = $_GET['users_id'];
+  $kursus_id = $_GET['kursus_id'];
+
+  // Debug data
+  echo "Users ID: $users_id<br>";
+  echo "Kursus ID: $kursus_id<br>";
+
+  // Query untuk menyimpan data
+  $query = mysqli_query($conn, "INSERT INTO reg_course (users_id, kursus_id, date_course) VALUES ('$users_id', '$kursus_id', NOW())");
+
+  if ($query) {
+      echo '<script>alert("Data berhasil disimpan!");window.location.href = "index.php";</script>';
+  } else {
+      echo "Error: " . mysqli_error($conn);
+  }
+}
+?>

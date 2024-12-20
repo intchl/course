@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../../../login.php");
+    exit;
+}
+
+require '../../../functions.php';
+?>
+
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -264,7 +275,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -293,11 +304,11 @@
                     <form>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-fullname">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="basic-default-fullname" placeholder="Masukkan nama lengkap" />
+                        <input type="text" name="name" class="form-control" id="basic-default-fullname" placeholder="Masukkan nama lengkap" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-address">Alamat</label>
-                        <input type="text" class="form-control" id="basic-default-address" placeholder="Alamat lengkap" />
+                        <input type="text" name="address" class="form-control" id="basic-default-address" placeholder="Alamat lengkap" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="basic-default-phone">No HP</label>
@@ -305,9 +316,10 @@
                           type="text"
                           id="basic-default-phone"
                           class="form-control phone-mask"
-                          placeholder="Masukkan No.HP" />
+                          placeholder="Masukkan No.HP"
+                          name="phone" />
                       </div>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
                       <a href="index.php">
                         <btn class="btn btn-secondary">Batal</btn>
                       </a>
@@ -385,3 +397,29 @@
 </body>
 
 </html>
+
+<?php
+//catching data from form
+if (isset($_GET['simpan'])) {
+    echo "Form disubmit.<br>";
+    $name = $_GET['name'];
+    $address = $_GET['address'];
+    $phone = $_GET['phone'];
+
+    echo "Name: $name, Address: $address, Phone: $phone<br>";
+
+    $query = mysqli_query($conn, "INSERT INTO student (name, address, phone) VALUES ('$name', '$address', '$phone')");
+    if ($query) {
+        echo '<script>alert("Data berhasil disimpan!");window.location.href = "index.php";</script>';
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+    if($query){
+        if ($query) {
+            echo '<script>alert("Data berhasil disimpan!");window.location.href = "index.php";</script>';
+        } else {
+            echo '<script>alert("Data gagal disimpan!");window.location.href = "index.php";</script>';
+        }
+    }
+}
+?>

@@ -1,3 +1,14 @@
+<?php session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../../../login.php");
+    exit;
+}
+
+require '../../../functions.php';
+
+$data = tampil("SELECT * FROM student");
+?>
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -236,35 +247,7 @@
                       </div>
                     </a>
                   </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bx bx-user me-2"></i>
-                      <span class="align-middle">My Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bx bx-cog me-2"></i>
-                      <span class="align-middle">Settings</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <span class="d-flex align-items-center align-middle">
-                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                        <span class="flex-grow-1 align-middle">Billing</span>
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="auth-login-basic.html">
+                    <a class="dropdown-item" href="../../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -293,96 +276,46 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>No.</th>
                       <th>Nama</th>
                       <th>Alamat</th>
                       <th>No Hp</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
+                  <?php $i = 1; ?>
+                  <?php foreach ($data as $data2) : ?>
                   <tbody class="table-border-bottom-0">
+                    
                     <tr>
-                      <td>Intan Unyu</td>
-                      <td>Jl. Pandau</td>
-                      <td>08238448484</td>
+                      <td><?= $i; ?></td>
+                      <td><?= $data2["name"]; ?></td>
+                      <td><?= $data2["address"]; ?></td>
+                      <td><?= $data2["phone"]; ?></td>
                       <td>
                         <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Intan Unyu</td>
-                      <td>Jl. Pandau</td>
-                      <td>08238448484</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Intan Unyu</td>
-                      <td>Jl. Pandau</td>
-                      <td>08238448484</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Intan Unyu</td>
-                      <td>Jl. Pandau</td>
-                      <td>08238448484</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Intan Unyu</td>
-                      <td>Jl. Pandau</td>
-                      <td>08238448484</td>
-                      <td>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="edit.php"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
-                          </div>
+                          <a class="dropdown-item" href="edit.php?id=<?= $data2['id']; ?>">
+                              <i class="bx bx-edit-alt me-1"></i> Edit
+                          </a>
+                          <form action="" method="POST" onsubmit="return confirm('Apakah anda yakin ingin menghapus data ini?')">
+                              <input type="hidden" name="id_student" value="<?= $data2['id']; ?>">
+                              <button type="submit" name="hapus" class="dropdown-item">
+                                  <i class="bx bx-trash me-1"></i> Delete
+                              </button>
+                          </form>
+                      </div>
                         </div>
                       </td>
                     </tr>
 
                     <!-- Additional rows go here -->
                   </tbody>
+                  <?php $i++; ?>
+                  <?php endforeach; ?>
                 </table>
               </div>
             </div>
@@ -461,3 +394,19 @@
 </body>
 
 </html>
+
+<?php
+if(isset($_POST['hapus'])){
+    $id_student = $_POST['id_student'];
+
+    $query = mysqli_query($conn, "DELETE FROM student WHERE id ='$id_student'");
+    if($query){
+        if ($query) {
+            echo '<script>alert("Data berhasil dihapus!");window.location.href = "index.php";</script>';
+        } else {
+            echo '<script>alert("Data gagal dihapus!");window.location.href = "index.php";</script>';
+        }
+    }
+}
+
+?>

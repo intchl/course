@@ -1,3 +1,20 @@
+<?php
+session_start();
+if (isset($_SESSION["login"])) {
+    header("Location: login.php");
+    exit;
+}
+
+require 'functions.php';
+if (isset($_POST["login"])) {
+    if (login($_POST) > 0) {
+    } else {
+        echo "Email atau Password anda salah";
+    }
+}
+
+
+?>
 <!DOCTYPE html>
 <html
     lang="en"
@@ -57,45 +74,31 @@
             <div class="authentication-inner">
                 <!-- Register -->
                 <div class="card">
-                    <div class="card-body">
+                <div class="card-body">
                         <h4 class="mb-2">Halo! 👋</h4>
                         <p class="mb-4">Mohon login terlebih dahulu</p>
 
-                        <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+                        <form id="formAuthentication" class="mb-3" method="post">
                             <div class="mb-3">
-                                <label for="email" class="form-label">Username</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="email"
-                                    name="email-username"
-                                    placeholder="Masukkan Username"
-                                    autofocus />
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan Username" autofocus />
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between">
                                     <label class="form-label" for="password">Password</label>
                                 </div>
                                 <div class="input-group input-group-merge">
-                                    <input
-                                        type="password"
-                                        id="password"
-                                        class="form-control"
-                                        name="password"
-                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <button class="btn btn-primary d-grid w-100" type="submit">Masuk</button>
+                                <button class="btn btn-primary d-grid w-100" type="submit" name="login">Masuk</button>
                             </div>
                         </form>
 
                         <p class="text-center">
                             <span>Belum punya akun?</span>
-                            <a href="register.php">
-                                <span>Buat Akun</span>
-                            </a>
+                            <a href="register.php"><span>Buat Akun</span></a>
                         </p>
                     </div>
                 </div>
