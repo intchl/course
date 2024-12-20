@@ -73,11 +73,12 @@
     <div class="page-title light-background">
       <div class="container">
         <h1>Kursus Pemrograman</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Kursus Pemrograman</li>
-          </ol>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="index.php" class="active">Home</a></li>
+            <li><a href="kursus.php">Kursus</a></li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
       </div>
     </div>
@@ -96,7 +97,7 @@
             </p>
           </div>
           <div class="col-lg-12 d-flex justify-content-center">
-            <a class="btn btn-primary rounded-pill px-5 py-3" href="index.html#about" data-aos="fade-up"
+            <a class="btn btn-primary rounded-pill px-5 py-3" href="kursus.php" data-aos="fade-up"
               data-aos-delay="200">
               Daftar Sekarang
             </a>

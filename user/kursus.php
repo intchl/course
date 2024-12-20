@@ -49,8 +49,8 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.php" class="active">Home</a></li>
-          <li><a href="kursus.php">Kursus</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="kursus.php" class="active">Kursus</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -62,51 +62,13 @@
 
   <main class="main">
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero section">
-
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row align-items-center">
-          <div class="col-lg-6">
-            <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
-              <div class="company-badge mb-4">
-                <i class="bi bi-gear-fill me-2"></i>
-                Kursus Online Berkualitas
-              </div>
-
-              <h1 class="mb-4">
-                Belajar Bersama,<br>
-                <span class="accent-text"> Raih Karier Impian!</span>
-              </h1>
-
-              <p class="mb-4 mb-md-5">
-                Nikmati Pembelajaran Interaktif, Praktis, dan Bisa Diakses Kapan Saja. Ratusan Kursus Online Siap Membantu Anda Menguasai Keterampilan Baru untuk Masa Depan yang Lebih Cerah.
-              </p>
-
-            </div>
-          </div>
-
-          <div class="col-lg-6">
-            <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
-              <img src="assets/img/illustration-1.webp" alt="Hero Image" class="img-fluid">
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </section><!-- /Hero Section -->
-
-
-
     <!-- Services Section -->
-    <section id="services" class="services section light-background">
+    <section id="services" class="services section light-background" style="padding-top: 160px;">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Kursus Kami</h2>
-        <p>Kursus Terbaik Kami untuk Masa Depan Kamu</p>
+        <h2>Kursus Anda</h2>
+        <p>Kumpulan kursus yang sudah anda ikuti</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -121,7 +83,7 @@
               <div>
                 <h3>Kursus Pemrograman</h3>
                 <p>Belajar dasar-dasar pemrograman, mulai dari HTML, CSS, JavaScript, hingga framework seperti React atau Laravel.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                <h6 class="fw-bolder">Jadwal Kursus</h6>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -134,7 +96,7 @@
               <div>
                 <h3>Kursus Desain Grafis</h3>
                 <p>Kuasai tools desain seperti Adobe Photoshop, Illustrator, dan Figma untuk kebutuhan desain modern.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                <h6 class="fw-bolder">Jadwal Kursus</h6>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -147,7 +109,7 @@
               <div>
                 <h3>Kursus Digital Marketing</h3>
                 <p>Pelajari strategi pemasaran online seperti SEO, SEM, dan social media ads</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                <h6 class="fw-bolder">Jadwal Kursus</h6>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -160,7 +122,7 @@
               <div>
                 <h3>Kursus Data Science</h3>
                 <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                <h6 class="fw-bolder">Jadwal Kursus</h6>
               </div>
             </div>
           </div><!-- End Service Card -->
