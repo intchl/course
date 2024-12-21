@@ -1,10 +1,34 @@
+<?php 
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+require '../functions.php';
+$users_id = $_SESSION['users_id']; // ID user dari sesi
+// Tangkap ID kursus dari URL
+if (!isset($_GET['id'])) {
+  echo "<script>alert('ID kursus tidak ditemukan!');window.location.href='index.php';</script>";
+  exit;
+}
+
+
+$course_id = $_GET['id'];
+
+$data = tampil("SELECT * FROM course WHERE id = '$course_id' ");
+
+
+$course = $data[0]; // Ambil data kursus pertama
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Service Details - iLanding Bootstrap Template</title>
+  <title> <?= htmlspecialchars($course['course_name']); ?></title>
   <meta name="description" content="" />
   <meta name="keywords" content="" />
 
@@ -72,41 +96,31 @@
     <!-- Page Title -->
     <div class="page-title light-background">
       <div class="container">
-        <h1>Kursus Pemrograman</h1>
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="index.php" class="active">Home</a></li>
-            <li><a href="kursus.php">Kursus</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+        <h1> <?= htmlspecialchars($course['course_name']); ?></h1>
       </div>
     </div>
-    <!-- End Page Title -->
 
     <!-- Service Details Section -->
     <section id="service-details" class="service-details section">
       <div class="container">
         <div class="row gy-5">
-          <div
-            class="col-lg-12 ps-lg-5 "
-            data-aos="fade-up"
-            data-aos-delay="200">
-            <p>
-              ini isinya deskripsi ya
-            </p>
+          <div class="col-lg-12 ps-lg-2" data-aos="fade-up" data-aos-delay="200">
+            <h2>Jadwal</h2>
+            <h3><?= htmlspecialchars($course['schedule']); ?></h3>
+          </div>
+          <div class="col-lg-12 ps-lg-2" data-aos="fade-up" data-aos-delay="200">
+            <h2>Deskripsi</h2>
+            <h3><?= htmlspecialchars($course['description']); ?></h3>
           </div>
           <div class="col-lg-12 d-flex justify-content-center">
-            <a class="btn btn-primary rounded-pill px-5 py-3" href="kursus.php" data-aos="fade-up"
-              data-aos-delay="200">
-              Daftar Sekarang
-            </a>
+            <form action="" method="POST" data-aos="fade-up" data-aos-delay="200">
+              <input type="hidden" name="course_id" value="<?= htmlspecialchars($course_id); ?>">
+              <button type="submit" name="register" class="btn btn-primary rounded-pill px-5 py-3">Daftar Sekarang</button>
+            </form>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- /Service Details Section -->
   </main>
 
   <footer id="footer" class="footer">
@@ -142,3 +156,25 @@
 </body>
 
 </html>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["register"])) {
+  $kursus_id = $_POST["course_id"];
+  $users_id = $_SESSION['users_id']; // ID user dari sesi
+
+  // Cek apakah user sudah terdaftar dalam kursus
+  $check = tampil("SELECT * FROM reg_course WHERE users_id = '$users_id' AND kursus_id = '$kursus_id'");
+  if (!empty($check)) {
+      echo "<script>alert('Anda sudah terdaftar di kursus ini!');window.location.href='index.php';</script>";
+  } else {
+      // Query untuk menyimpan data ke tabel reg_course
+      $query = "INSERT INTO reg_course (users_id, kursus_id, date_course) VALUES ('$users_id', '$kursus_id', NOW())";
+      if (mysqli_query($conn, $query)) {
+          // Setelah pendaftaran berhasil, arahkan ke halaman kursus milik user
+          echo "<script>alert('Kursus berhasil ditambahkan!');window.location.href='kursus.php';</script>";
+      } else {
+          echo "<script>alert('Pendaftaran gagal. Coba lagi!');</script>";
+      }
+  }
+}
+?>

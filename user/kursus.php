@@ -1,3 +1,24 @@
+<?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+require '../functions.php';
+$users_id = $_SESSION['users_id']; // ID user dari sesi
+
+$query = "
+  SELECT c.course_name, c.schedule, c.description
+  FROM course c
+  JOIN reg_course r ON c.id = r.kursus_id
+  WHERE r.users_id = '$users_id'
+";
+$data = tampil($query);
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,58 +95,27 @@
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row g-4">
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <?php
+        if ($data) {
+          foreach ($data as $course) {?>
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-activity"></i>
-              </div>
-              <div>
-                <h3>Kursus Pemrograman</h3>
-                <p>Belajar dasar-dasar pemrograman, mulai dari HTML, CSS, JavaScript, hingga framework seperti React atau Laravel.</p>
-                <h6 class="fw-bolder">Jadwal Kursus</h6>
-              </div>
+                <div class="icon flex-shrink-0">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <div>
+                    <h3> <?= htmlspecialchars($course['course_name']); ?> </h3>
+                    <p><?= htmlspecialchars($course['description']); ?></p>
+                    <h6 class="fw-bolder">Jadwal Kursus</h6>
+                    <p><?= htmlspecialchars($course['schedule']); ?></p>
+                </div>
             </div>
-          </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-diagram-3"></i>
-              </div>
-              <div>
-                <h3>Kursus Desain Grafis</h3>
-                <p>Kuasai tools desain seperti Adobe Photoshop, Illustrator, dan Figma untuk kebutuhan desain modern.</p>
-                <h6 class="fw-bolder">Jadwal Kursus</h6>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-easel"></i>
-              </div>
-              <div>
-                <h3>Kursus Digital Marketing</h3>
-                <p>Pelajari strategi pemasaran online seperti SEO, SEM, dan social media ads</p>
-                <h6 class="fw-bolder">Jadwal Kursus</h6>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-clipboard-data"></i>
-              </div>
-              <div>
-                <h3>Kursus Data Science</h3>
-                <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
-                <h6 class="fw-bolder">Jadwal Kursus</h6>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
+        </div>
+        <?php
+            }
+          } else {
+              echo '<p class="text-center">Anda belum terdaftar di kursus manapun.</p>';
+          }?><!-- End Service Card -->';
 
         </div>
 

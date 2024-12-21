@@ -18,6 +18,7 @@ function login($data)
     if ($cek > 0) {
         $row = mysqli_fetch_assoc($result);
         $_SESSION["login"] = true;
+        $_SESSION["users_id"] = $row['id']; // Menyimpan ID pengguna ke dalam sesi
         
         // Pengecekan role pengguna
         if ($row['role'] == 'admin') {

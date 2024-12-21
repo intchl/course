@@ -1,3 +1,15 @@
+<?php 
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+require '../functions.php';
+
+$data = tampil("SELECT * FROM course");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -112,59 +124,20 @@
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row g-4">
-
+        <?php foreach ($data as $data2) : ?>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <div class="service-card d-flex">
               <div class="icon flex-shrink-0">
                 <i class="bi bi-activity"></i>
               </div>
               <div>
-                <h3>Kursus Pemrograman</h3>
-                <p>Belajar dasar-dasar pemrograman, mulai dari HTML, CSS, JavaScript, hingga framework seperti React atau Laravel.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                <h3><?= $data2["course_name"]; ?></h3>
+                <p><?= $data2["description"]; ?></p>
+                <a href="kursus_detail.php?id=<?= $data2['id']; ?>" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-diagram-3"></i>
-              </div>
-              <div>
-                <h3>Kursus Desain Grafis</h3>
-                <p>Kuasai tools desain seperti Adobe Photoshop, Illustrator, dan Figma untuk kebutuhan desain modern.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-easel"></i>
-              </div>
-              <div>
-                <h3>Kursus Digital Marketing</h3>
-                <p>Pelajari strategi pemasaran online seperti SEO, SEM, dan social media ads</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-card d-flex">
-              <div class="icon flex-shrink-0">
-                <i class="bi bi-clipboard-data"></i>
-              </div>
-              <div>
-                <h3>Kursus Data Science</h3>
-                <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
-                <a href="kursus_detail.php" class="read-more">Lihat Detail <i class="bi bi-arrow-right"></i></a>
-              </div>
-            </div>
-          </div><!-- End Service Card -->
-
+          <?php endforeach; ?>
         </div>
 
       </div>

@@ -1,3 +1,47 @@
+<?php
+// Koneksi ke database
+require 'functions.php';
+
+
+// Tangkap data dari form
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $phone = $_POST['phone'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $role = 'student'; // Default role
+
+    // Mulai transaksi
+    $conn->begin_transaction();
+
+    try {
+        // Insert ke tabel student
+        $query_student = "INSERT INTO student (name, address, phone) VALUES (?, ?, ?)";
+        $stmt_student = $conn->prepare($query_student);
+        $stmt_student->bind_param("sss", $name, $address, $phone);
+        $stmt_student->execute();
+
+        // Ambil ID student yang baru saja dibuat
+        $student_id = $conn->insert_id;
+
+        // Insert ke tabel users
+        $query_user = "INSERT INTO users (username, password, student_id, role) VALUES (?, ?, ?, ?)";
+        $stmt_user = $conn->prepare($query_user);
+        $stmt_user->bind_param("ssis", $username, $password, $student_id, $role);
+        $stmt_user->execute();
+
+        // Commit transaksi
+        $conn->commit();
+
+        echo '<script>alert("Registrasi berhasil!");window.location.href="login.php";</script>';
+    } catch (Exception $e) {
+        // Rollback jika terjadi kesalahan
+        $conn->rollback();
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
 <!DOCTYPE html>
 
 <html
@@ -62,10 +106,30 @@
             <h4 class="mb-2">Register 🚀</h4>
             <p class="mb-4">Ayo buat akun agar bisa masuk!</p>
 
-            <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+            <form id="formAuthentication" class="mb-3" action="" method="POST">
               <div class="mb-3">
-                <label for="nama" class="form-label">Nama Lengkap</label>
-                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama Lengkap" />
+                <label for="name" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan Nama Lengkap" />
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Alamat</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  name="address"
+                  placeholder="Masukkan Alamat"
+                  autofocus />
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">No. Hp</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  placeholder="Masukkan Nomor Hp"
+                  autofocus />
               </div>
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
@@ -92,7 +156,7 @@
                 </div>
               </div>
 
-              <button class="btn btn-primary d-grid w-100">Daftar</button>
+              <button class="btn btn-primary d-grid w-100" type="submit" name="daftar">Daftar</button>
             </form>
 
             <p class="text-center">
